@@ -1,0 +1,157 @@
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+  #app {
+    padding: 1rem;
+  }
+
+  .navbar {
+    padding: 0.8rem 1rem;
+  }
+
+  .navbar__toggle {
+    display: flex;
+  }
+
+  .navbar__menu {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: rgba(10, 10, 26, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-glow);
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 0;
+    gap: 0.5rem;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .navbar__menu--active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .navbar__link {
+    font-size: 1.1rem;
+    padding: 0.8rem 2rem;
+  }
+
+  .navbar__link::after {
+    display: none;
+  }
+
+  .navbar__link--active {
+    background: rgba(212, 160, 23, 0.1);
+  }
+
+  .chatApp {
+    height: calc(100vh - 120px);
+    border-radius: var(--radius-md);
+  }
+
+  .message {
+    max-width: 90%;
+  }
+
+  .chatComposer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .chatSend {
+    width: 100%;
+  }
+
+  .character-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .character-card {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .about {
+    padding: 1rem 0.75rem;
+  }
+
+  .about__content {
+    padding: 1.5rem;
+  }
+
+  .about h1 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+
+  #app {
+    padding: 0.8rem;
+  }
+
+  .navbar__logo-text {
+    font-size: 1.2rem;
+  }
+
+  .navbar__logo-icon {
+    font-size: 1.4rem;
+  }
+
+  .chatHeader {
+    padding: 0.8rem 1rem;
+  }
+
+  .chatTitle {
+    font-size: 1.2rem;
+  }
+
+  .chatMessages {
+    padding: 1rem;
+  }
+
+  .message {
+    max-width: 95%;
+  }
+
+  .message__content {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .chatComposer {
+    padding: 0.8rem;
+  }
+
+  .character-card {
+    min-width: 0;
+    padding: 1rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .chatApp {
+    max-width: 900px;
+  }
+
+  .message {
+    max-width: 70%;
+  }
+
+  .about {
+    max-width: 800px;
+  }
+}

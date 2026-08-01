@@ -1,0 +1,24 @@
+# Variables de entorno (contienen la API key, nunca se suben al repo)
+.env
+.env.local
+.env.*.local
+
+# Dependencias
+node_modules/
+
+# Carpeta de build/deploy de Vercel
+.vercel/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+.vercel

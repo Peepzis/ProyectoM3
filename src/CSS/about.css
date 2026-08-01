@@ -1,0 +1,71 @@
+.about {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.about h1 {
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 2rem;
+  position: relative;
+}
+
+.about h1::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: var(--gold);
+  margin: 0.8rem auto 0;
+  border-radius: 2px;
+}
+
+.about__content {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-md);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.about__content h2 {
+  margin-top: 1.8rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+  color: var(--gold-light);
+}
+
+.about__content h2:first-of-type {
+  margin-top: 0;
+}
+
+.about__content p {
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  line-height: 1.7;
+}
+
+.about__content ul {
+  list-style: none;
+  padding: 0;
+}
+
+.about__content li {
+  padding: 0.4rem 0;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.about__content li::before {
+  content: "⚔";
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+
+.about__content li:hover {
+  color: var(--text-primary);
+}

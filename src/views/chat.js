@@ -1,17 +1,17 @@
 import { fetchCharacterResponse } from '../API/chatApi.js';
 
 export function renderChat() {
-  // Solo se usa para el mensaje de bienvenida y el avatar; las respuestas reales vienen de la IA
+  // Solo se usa para el mensaje de bienvenida y la imagen del personaje; las respuestas reales vienen de la IA
   const characters = {
     heman: {
       name: 'He-Man',
-      avatar: '🦸',
-      bienvenida: '¡Por el poder de Grayskull! ¿En qué te ayudo?'
+      bienvenida: '¡Por el poder de Grayskull! ¿En qué te ayudo?',
+      image: '/imagenes/heman.jpg'
     },
     skeletor: {
       name: 'Skeletor',
-      avatar: '💀',
-      bienvenida: '¡Nyeeeh! ¿Qué quieres, insecto?'
+      bienvenida: '¡Nyeeeh! ¿Qué quieres, insecto?',
+      image: '/imagenes/Skeletor.jpg'
     }
   };
   let currentCharacter = 'heman';
@@ -23,17 +23,17 @@ export function renderChat() {
   app.innerHTML = `
     <div class="chatApp" data-character="heman">
       <header class="chatHeader">
-        <h1 class="chatTitle">Chat</h1>
-        <p class="chatSubtitle">Con tu personaje favorito</p>
+        <h1 class="chatTitle">Chate en vivo</h1>
+        <p class="chatSubtitle">Con tu personaje favorito de Eternia</p>
       </header>
 
       <div class="character-cards">
         <div class="character-card character-card--selected" data-character="heman">
-          <span class="character-card__avatar">🦸</span>
+          <img class="character-card__image" src="${characters.heman.image}" alt="${characters.heman.name}">
           <h3>He-Man</h3>
         </div>
         <div class="character-card" data-character="skeletor">
-          <span class="character-card__avatar">💀</span>
+          <img class="character-card__image" src="${characters.skeletor.image}" alt="${characters.skeletor.name}">
           <h3>Skeletor</h3>
         </div>
       </div>

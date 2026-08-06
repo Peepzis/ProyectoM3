@@ -3,8 +3,5 @@
   "version": "1.0.0",
   "description": "SPA frontend-only con chat de personajes de He-Man integrado con Gemini vía función serverless de Vercel",
   "type": "module",
-  "private": true,
-  "scripts": {
-    "dev": "vercel dev"
-  }
+  "private": true
 }

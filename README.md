@@ -1,5 +1,32 @@
 # ComicSansCon / He-Man Chat
 
+## Cómo levantar el proyecto
+
+1. Cloná el repositorio e instalá las dependencias:
+   ```bash
+   npm install
+   ```
+2. Copiá `.env.example` como `.env` y completá tu clave real:
+   ```bash
+   cp .env.example .env
+   ```
+   ```env
+   GEMINI_API_KEY=tu_clave_aqui
+   ```
+3. Iniciá el proyecto localmente con Vercel CLI (no uses `npm run dev`, corré el comando directo):
+   ```bash
+   vercel dev
+   ```
+   La primera vez te va a pedir vincular la carpeta a un proyecto de Vercel (crear uno nuevo o buscar uno existente).
+
+4. Para desplegar a producción:
+   ```bash
+   vercel --prod
+   ```
+   Antes de desplegar, configurá `GEMINI_API_KEY` en el dashboard de Vercel (**Settings → Environment Variables**, aplicada a *Production*) — el `.env` local nunca se sube al servidor de Vercel, hay que cargarla ahí manualmente.
+
+   También revisá **Settings → Build & Development Settings → Development Command**: debe estar vacío (sin override), para que Vercel use su comportamiento por defecto en vez de intentar re-ejecutar `vercel dev` sobre sí mismo.
+
 ## Descripción general
 
 ComicSansCon es una aplicación web SPA para chatear con personajes de Masters del Universo, con una experiencia interactiva basada en HTML, CSS y JavaScript puro. El proyecto combina una interfaz de usuario del lado del cliente con una función serverless de Vercel para conectar con Gemini y generar respuestas en estilo de personaje.
@@ -28,7 +55,8 @@ ProyectM3/
 ├─ index.html
 ├─ package.json
 ├─ README.md
-├─ env.example
+├─ .env.example
+├─ .gitignore
 └─ src/
    ├─ API/
    │  └─ chatApi.js
@@ -51,44 +79,16 @@ ProyectM3/
 ## Requisitos
 
 - Node.js y npm.
+- Vercel CLI (`npm install -g vercel`).
 - Cuenta en Vercel.
 - Una clave de API de Gemini configurada como variable de entorno.
 
-## Instalación y ejecución
-
-1. Instala las dependencias (si aplica en tu entorno):
-   ```bash
-   npm install
-   ```
-2. Configura la variable de entorno en un archivo `.env` o en Vercel:
-   ```env
-   GEMINI_API_KEY=tu_clave_aqui
-   ```
-3. Inicia el proyecto localmente con Vercel:
-   ```bash
-   npm run dev
-   ```
-
-## Despliegue
-
-El proyecto está pensado para desplegarse en Vercel usando funciones serverless. El comando recomendado para desarrollo local es:
-
-```bash
-npm run dev
-```
-
-Y para producción:
-
-```bash
-vercel --prod
-```
-
 ## Variables de entorno
 
-- `GEMINI_API_KEY`: clave usada por la función serverless para consumir la API de Gemini.
+- `GEMINI_API_KEY`: clave usada por la función serverless para consumir la API de Gemini. Se configura en `.env` para desarrollo local y en el dashboard de Vercel para producción. Nunca se expone al navegador.
 
 ## Notas importantes
 
-- La lógica de la IA no se ejecuta directamente en el navegador; la llamada se realiza a la función serverless de Vercel.
+- La lógica de la IA no se ejecuta directamente en el navegador; la llamada se realiza a la función serverless de Vercel (`api/chat.js`), que es la única que tiene acceso a `GEMINI_API_KEY`.
 - Los prompts de personalidad para He-Man y Skeletor se definen en [src/API/chatApi.js](src/API/chatApi.js).
 - El chat mantiene el historial para que las respuestas se sientan más coherentes.

@@ -19,7 +19,7 @@
    ```env
    GEMINI_API_KEY=tu_clave_aqui
    ```
-4. Iniciá el proyecto localmente (no uses `npm run dev`, corré el comando directo):
+4. Iniciá el proyecto localmente :
    ```bash
    vercel dev
    ```

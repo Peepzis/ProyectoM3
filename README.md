@@ -2,38 +2,33 @@
 
 ## Descripción general
 
-ComicSansCon es una aplicación web frontend-only construida como SPA con HTML, CSS y JavaScript puro.
+ComicSansCon es una aplicación web SPA para chatear con personajes de Masters del Universo, con una experiencia interactiva basada en HTML, CSS y JavaScript puro. El proyecto combina una interfaz de usuario del lado del cliente con una función serverless de Vercel para conectar con Gemini y generar respuestas en estilo de personaje.
 
-El proyecto está pensado para ejecutarse como una aplicación estática/serveless en Vercel usando Vercel CLI, sin ningún backend tradicional.
+## Qué incluye
 
-## Enfoque del proyecto
+- SPA con navegación interna en las rutas `/`, `/chat` y `/about`.
+- Interfaz de chat con selección de personajes entre He-Man y Skeletor.
+- Integración con Gemini a través de una API serverless en Vercel.
+- Manejo de historial de conversación para mantener el contexto durante la charla.
+- Arquitectura modular con vistas, servicios de navegación y estilos separados.
 
-- Solo frontend: no existe ni se utiliza ningún servidor Node/Express ni servidor backend en este repositorio.
-- Deployment serverless: la app se despliega como sitio estático o aplicación frontend con Vercel.
-- El objetivo es que otra IA entienda que todas las modificaciones deben hacerse en el cliente y en la configuración de Vercel, no en un backend personalizado.
+## Arquitectura actual
 
-## Funcionalidad actual
-
-- Single Page Application (SPA) con rutas internas: `/`, `/chat`, `/about`.
-- Navegación client-side usando History API (`pushState` / `popstate`).
-- Página de chat con selección de personajes (`He-Man` y `Skeletor`).
-- Respuestas simuladas en el frontend con mensajes generados localmente.
-- Arquitectura modular: vistas en `src/views`, lógica de navegación en `src/servicios` y estilos en `src/CSS`.
-
-## Alcance actual
-
-- Proyecto educativo, sin backend ni servidor propio.
-- Incluye una demostración de chat interactivo en el navegador.
-- La lógica de IA o prompts se organiza en `src/API/chatApi.js`, pero el proyecto no usa un backend para procesar solicitudes.
-- El deploy debe hacerse con Vercel CLI y la app debe funcionar como frontend estático/serveless.
+- Frontend: HTML, CSS y JavaScript modular.
+- Lógica de chat: [src/API/chatApi.js](src/API/chatApi.js) y [src/views/chat.js](src/views/chat.js).
+- API serverless: [api/chat.js](api/chat.js).
+- Estilos: [src/CSS](src/CSS).
 
 ## Estructura del proyecto
 
-```
+```text
 ProyectM3/
-├─ .env
+├─ api/
+│  └─ chat.js
 ├─ index.html
+├─ package.json
 ├─ README.md
+├─ env.example
 └─ src/
    ├─ API/
    │  └─ chatApi.js
@@ -53,57 +48,47 @@ ProyectM3/
       └─ home.js
 ```
 
-## Archivos importantes
+## Requisitos
 
-- `index.html`: entrada principal de la aplicación.
-- `src/servicios/main.js`: configura el router y la navegación sin recargas.
-- `src/servicios/router.js`: define las rutas y renderiza las vistas.
-- `src/servicios/navigation.js`: intercepta enlaces y hace navegación SPA.
-- `src/views/home.js`: contenido de la página de inicio.
-- `src/views/chat.js`: interfaz de chat y simulación de mensajes.
-- `src/views/about.js`: información sobre el proyecto.
-- `src/API/chatApi.js`: generación de prompts de personaje y puntos de extensión para lógica de IA.
+- Node.js y npm.
+- Cuenta en Vercel.
+- Una clave de API de Gemini configurada como variable de entorno.
 
-## Vercel / Deployment
+## Instalación y ejecución
 
-El proyecto debe desplegarse como frontend estático/serverless con Vercel. No hay servidor backend local ni procesos de Express.
-
-Pasos básicos:
-
-1. Instalar Vercel CLI si no está instalado:
+1. Instala las dependencias (si aplica en tu entorno):
    ```bash
-   npm install -g vercel
+   npm install
    ```
-2. Iniciar sesión en Vercel:
-   ```bash
-   vercel login
+2. Configura la variable de entorno en un archivo `.env` o en Vercel:
+   ```env
+   GEMINI_API_KEY=tu_clave_aqui
    ```
-3. Servir localmente:
+3. Inicia el proyecto localmente con Vercel:
    ```bash
-   vercel dev
-   ```
-4. Desplegar en producción:
-   ```bash
-   vercel --prod
+   npm run dev
    ```
 
-Variables de entorno:
+## Despliegue
 
-- Si se necesita `GEMINI_API_KEY` u otras variables, debe configurarse en Vercel como variables de entorno.
-- En un proyecto frontend-only, los secretos no deben exponerse directamente en los archivos públicos.
+El proyecto está pensado para desplegarse en Vercel usando funciones serverless. El comando recomendado para desarrollo local es:
 
-## Contexto para otra IA
+```bash
+npm run dev
+```
 
-Esta aplicación se basa en una SPA frontend-only para la experiencia de usuario. Cualquier modificación debe:
+Y para producción:
 
-- enfocarse en archivos del frontend (`index.html`, `src/**/*.js`, `src/CSS/**/*.css`);
-- respetar que no hay backend ni servidor Node en el repositorio;
-- considerar Vercel CLI como la herramienta de despliegue local y producción;
-- evitar sugerir la creación de una carpeta `backend` o código de servidor en `backend`.
+```bash
+vercel --prod
+```
 
-## Posibles mejoras
+## Variables de entorno
 
-- Completar la integración de `src/API/chatApi.js` con un servicio externo desde el frontend.
-- Añadir validación y manejo de historial de chat en `src/views/chat.js`.
-- Mejorar la compatibilidad móvil y el diseño responsivo en `src/CSS`.
-- Organizar el flujo de datos para que la app pueda consumir un servicio serverless o API de terceros sin backend propio.
+- `GEMINI_API_KEY`: clave usada por la función serverless para consumir la API de Gemini.
+
+## Notas importantes
+
+- La lógica de la IA no se ejecuta directamente en el navegador; la llamada se realiza a la función serverless de Vercel.
+- Los prompts de personalidad para He-Man y Skeletor se definen en [src/API/chatApi.js](src/API/chatApi.js).
+- El chat mantiene el historial para que las respuestas se sientan más coherentes.

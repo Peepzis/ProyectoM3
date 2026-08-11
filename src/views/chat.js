@@ -1,7 +1,6 @@
 import { fetchCharacterResponse } from '../API/chatApi.js';
 
 export function renderChat() {
-  // Solo se usa para el mensaje de bienvenida y la imagen del personaje; las respuestas reales vienen de la IA
   const characters = {
     heman: {
       name: 'He-Man',
@@ -14,8 +13,14 @@ export function renderChat() {
       image: '/imagenes/Skeletor.jpg'
     }
   };
+
   let currentCharacter = 'heman';
-  let historial = []; // { role: 'user' | 'model', text }
+
+  // Un historial independiente por personaje: cambiar de personaje ya no borra la charla del otro
+  const historiales = {
+    heman: [],
+    skeletor: []
+  };
 
   const app = document.querySelector('#app');
   if (!app) return;
@@ -38,9 +43,7 @@ export function renderChat() {
         </div>
       </div>
 
-      <main class="chatMessages" aria-label="Mensajes">
-        <div class="message message--character">Hola, ¿en qué te ayudo?</div>
-      </main>
+      <main class="chatMessages" aria-label="Mensajes"></main>
 
       <form class="chatComposer">
         <input class="chatInput" type="text" placeholder="Escribe un mensaje…" aria-label="Escribe tu mensaje" />
@@ -49,73 +52,98 @@ export function renderChat() {
     </div>
   `;
 
-  // --- Lógica de selección de personaje y cambio de chat ---
   const chatApp = document.querySelector('.chatApp');
   const chatMessages = document.querySelector('.chatMessages');
 
-  // Cambia de personaje al clickear una tarjeta
+  // Dibuja el mensaje de bienvenida (se usa cuando el historial de un personaje está vacío)
+  function renderBienvenida() {
+    chatMessages.innerHTML = '';
+    const bienvenido = document.createElement('div');
+    bienvenido.classList.add('message', 'message--character');
+    bienvenido.textContent = characters[currentCharacter].bienvenida;
+    chatMessages.appendChild(bienvenido);
+  }
+
+  // Redibuja todos los mensajes guardados del personaje activo
+  function renderHistorial() {
+    chatMessages.innerHTML = '';
+    const historial = historiales[currentCharacter];
+
+    if (historial.length === 0) {
+      renderBienvenida();
+      return;
+    }
+
+    historial.forEach(turno => {
+      const div = document.createElement('div');
+      div.classList.add('message', turno.role === 'user' ? 'message--user' : 'message--character');
+      div.textContent = turno.text;
+      chatMessages.appendChild(div);
+    });
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  renderHistorial();
+
+  // Cambia de personaje al clickear una tarjeta (ya no borra el historial, solo cambia la vista)
   document.querySelectorAll('.character-card').forEach(card => {
     card.addEventListener('click', () => {
       document.querySelectorAll('.character-card').forEach(c =>
         c.classList.remove('character-card--selected'));
       card.classList.add('character-card--selected');
 
-      // Actualiza personaje activo
       currentCharacter = card.dataset.character;
       chatApp.dataset.character = currentCharacter;
 
-      // Reinicia el chat y el historial al cambiar de personaje
-      historial = [];
-      chatMessages.innerHTML = '';
-      const bienvenido = document.createElement('div');
-      bienvenido.classList.add('message', 'message--character');
-      bienvenido.textContent = characters[currentCharacter].bienvenida;
-      chatMessages.appendChild(bienvenido);
+      renderHistorial();
     });
   });
 
-  // Referencia al formulario y escucha el envío del formulario
   const form = document.querySelector('.chatComposer');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const input = document.querySelector('.chatInput');
-    const mensaje = input.value.trim(); // Obtiene lo que escribió el usuario
+    const mensaje = input.value.trim();
     if (!mensaje) return;
-    input.value = ''; // Limpia el input
+    input.value = '';
 
-    // Crea y agrega el mensaje del usuario
     const div = document.createElement('div');
     div.classList.add('message', 'message--user');
     div.textContent = mensaje;
     chatMessages.appendChild(div);
 
-    // Muestra indicador "Escribiendo..."
     const escribiendo = document.createElement('div');
     escribiendo.classList.add('message', 'message--character', 'escribiendo');
     escribiendo.textContent = 'Escribiendo...';
     chatMessages.appendChild(escribiendo);
 
-    // scroll automático
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    // Llama a la IA a través de chatApi.js (que a su vez llama a /api/chat)
-    const { response, error } = await fetchCharacterResponse(currentCharacter, mensaje, historial);
+    // Guarda una referencia al personaje activo al momento de enviar,
+    // para no mezclar la respuesta si el usuario cambia de personaje mientras espera
+    const characterAlEnviar = currentCharacter;
+    const { response, error } = await fetchCharacterResponse(
+      characterAlEnviar,
+      mensaje,
+      historiales[characterAlEnviar]
+    );
 
     escribiendo.remove();
 
-    // Crea y agrega la respuesta real del personaje
-    const respuesta = document.createElement('div');
-    respuesta.classList.add('message', 'message--character');
-    respuesta.textContent = error ? 'Ocurrió un error, intenta de nuevo.' : response;
-    chatMessages.appendChild(respuesta);
-
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    // Solo guarda en el historial si la respuesta fue exitosa
     if (!error) {
-      historial.push({ role: 'user', text: mensaje });
-      historial.push({ role: 'model', text: response });
+      historiales[characterAlEnviar].push({ role: 'user', text: mensaje });
+      historiales[characterAlEnviar].push({ role: 'model', text: response });
+    }
+
+    // Solo repinta si seguimos parados en el mismo personaje que hizo la pregunta
+    if (characterAlEnviar === currentCharacter) {
+      const respuesta = document.createElement('div');
+      respuesta.classList.add('message', 'message--character');
+      respuesta.textContent = error ? 'Ocurrió un error, intenta de nuevo.' : response;
+      chatMessages.appendChild(respuesta);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
     }
   });
 }

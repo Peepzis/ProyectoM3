@@ -2,30 +2,36 @@
 
 ## Cómo levantar el proyecto
 
-1. Cloná el repositorio e instalá las dependencias:
+1. Instalá Node.js (si no lo tenés) y Vercel CLI de forma global:
    ```bash
+   npm install -g vercel
+   ```
+2. Cloná el repositorio e instalá las dependencias:
+   ```bash
+   git clone <url-del-repositorio>
+   cd ProyectM3
    npm install
    ```
-2. Copiá `.env.example` como `.env` y completá tu clave real:
+3. Conseguí tu propia clave de API de Gemini en [Google AI Studio](https://aistudio.google.com/app/apikey) (es gratuita). Copiá `.env.example` como `.env` y completá esa clave:
    ```bash
    cp .env.example .env
    ```
    ```env
    GEMINI_API_KEY=tu_clave_aqui
    ```
-3. Iniciá el proyecto localmente con Vercel CLI (no uses `npm run dev`, corré el comando directo):
+4. Iniciá el proyecto localmente :
    ```bash
    vercel dev
    ```
-   La primera vez te va a pedir vincular la carpeta a un proyecto de Vercel (crear uno nuevo o buscar uno existente).
+   La primera vez te va a preguntar a qué proyecto de Vercel vincular la carpeta. Elegí **"Create a new project"** (no busques uno existente — el proyecto original pertenece a otra cuenta) y aceptá los valores por defecto que te proponga.
 
-4. Para desplegar a producción:
+   Una vez levantado, abrí la URL local que te indique (normalmente `http://localhost:3000`) y navegá a `/chat`.
+
+5. *(Opcional)* Si además querés probarlo desplegado en producción:
    ```bash
    vercel --prod
    ```
-   Antes de desplegar, configurá `GEMINI_API_KEY` en el dashboard de Vercel (**Settings → Environment Variables**, aplicada a *Production*) — el `.env` local nunca se sube al servidor de Vercel, hay que cargarla ahí manualmente.
-
-   También revisá **Settings → Build & Development Settings → Development Command**: debe estar vacío (sin override), para que Vercel use su comportamiento por defecto en vez de intentar re-ejecutar `vercel dev` sobre sí mismo.
+   Para que funcione, primero hay que cargar `GEMINI_API_KEY` en el dashboard de ese nuevo proyecto de Vercel (**Settings → Environment Variables**, aplicada a *Production*) — el `.env` local nunca se sube al servidor, hay que configurarla ahí manualmente.
 
 ## Descripción general
 

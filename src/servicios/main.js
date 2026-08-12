@@ -1,10 +1,12 @@
 import { router } from './router.js';
-import { setupLinkInterception } from './navigation.js';
+import { setupLinkInterception, setupMobileMenu } from './navigation.js';
 
 // Listener para Back/Forward
 window.addEventListener('popstate', () => {
-  router(); 
+  router();
 });
+
 setupLinkInterception();
+setupMobileMenu();
 
 router();

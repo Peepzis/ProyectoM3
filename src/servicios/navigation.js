@@ -17,5 +17,35 @@ export function setupLinkInterception() {
 
     event.preventDefault();
     navigateTo(href);
+
+    // Si el link se clickeó dentro del menú mobile abierto, lo cerramos
+    closeMobileMenu();
+  });
+}
+
+const toggle = document.querySelector('.navbar__toggle');
+const menu = document.querySelector('.navbar__menu');
+
+function closeMobileMenu() {
+  if (!toggle || !menu) return;
+  menu.classList.remove('navbar__menu--active');
+  toggle.setAttribute('aria-expanded', 'false');
+}
+
+export function setupMobileMenu() {
+  if (!toggle || !menu) return;
+
+  toggle.addEventListener('click', () => {
+    const isActive = menu.classList.toggle('navbar__menu--active');
+    toggle.setAttribute('aria-expanded', String(isActive));
+  });
+
+  // Cierra el menú si se hace click fuera de él
+  document.addEventListener('click', (event) => {
+    const clickedInsideMenu = menu.contains(event.target);
+    const clickedToggle = toggle.contains(event.target);
+    if (!clickedInsideMenu && !clickedToggle) {
+      closeMobileMenu();
+    }
   });
 }

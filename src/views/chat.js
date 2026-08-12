@@ -28,8 +28,13 @@ export function renderChat() {
   app.innerHTML = `
     <div class="chatApp" data-character="heman">
       <header class="chatHeader">
-        <h1 class="chatTitle">Chate en vivo</h1>
-        <p class="chatSubtitle">Con tu personaje favorito de Eternia</p>
+        <div class="chatHeader__top">
+          <div>
+            <h1 class="chatTitle">Chate en vivo</h1>
+            <p class="chatSubtitle">Con tu personaje favorito de Eternia</p>
+          </div>
+          <button type="button" class="chatClear" title="Borrar esta conversación">🗑 Borrar charla</button>
+        </div>
       </header>
 
       <div class="character-cards">
@@ -54,6 +59,7 @@ export function renderChat() {
 
   const chatApp = document.querySelector('.chatApp');
   const chatMessages = document.querySelector('.chatMessages');
+  const clearBtn = document.querySelector('.chatClear');
 
   // Dibuja el mensaje de bienvenida (se usa cuando el historial de un personaje está vacío)
   function renderBienvenida() {
@@ -98,6 +104,15 @@ export function renderChat() {
 
       renderHistorial();
     });
+  });
+
+  // Borra la conversación del personaje activo (con confirmación para evitar borrados accidentales)
+  clearBtn.addEventListener('click', () => {
+    const confirmado = window.confirm(`¿Borrar la conversación con ${characters[currentCharacter].name}?`);
+    if (!confirmado) return;
+
+    historiales[currentCharacter] = [];
+    renderBienvenida();
   });
 
   const form = document.querySelector('.chatComposer');

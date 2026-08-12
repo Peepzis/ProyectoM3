@@ -294,3 +294,28 @@
 [data-character="manattacks"] .chatSend:hover {
   box-shadow: 0 4px 15px var(--char-manattacks-glow);
 }
+
+.chatHeader__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.chatClear {
+  background: rgba(180, 40, 40, 0.12);
+  color: #e88;
+  border: 1px solid rgba(180, 40, 40, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.78rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+
+.chatClear:hover {
+  background: rgba(180, 40, 40, 0.22);
+  border-color: rgba(180, 40, 40, 0.6);
+}
